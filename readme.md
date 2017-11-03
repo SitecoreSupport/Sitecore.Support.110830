@@ -1,5 +1,5 @@
 # Sitecore.Support.110830
-Prevents the Forged request detected error
+Prevents the `Forged request detected` error when submitting a form after the session expiration.
 
 ## License  
 This patch is licensed under the [Sitecore Corporation A/S License for GitHub](https://github.com/sitecoresupport/Sitecore.Support.110830/blob/master/LICENSE).  
