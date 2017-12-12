@@ -1,5 +1,4 @@
 ﻿using Sitecore.Diagnostics;
-using Sitecore.Form.Core;
 using Sitecore.Form.Core.Ascx.Controls;
 using Sitecore.Form.Core.Client.Submit;
 using Sitecore.Form.Core.Configuration;
@@ -9,7 +8,6 @@ using Sitecore.Form.Core.Utility;
 using Sitecore.Form.Web.UI.Controls;
 using Sitecore.Forms.Core.Data;
 using Sitecore.Pipelines;
-using Sitecore.WFFM.Abstractions;
 using Sitecore.WFFM.Abstractions.Actions;
 using Sitecore.WFFM.Abstractions.Shared;
 using System;
@@ -20,12 +18,14 @@ using System.Threading;
 using System.Web.Helpers;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Sitecore.Forms.Core.Handlers;
+using Sitecore.WFFM.Abstractions.Dependencies;
 
 namespace Sitecore.Support.Form.Web.UI.Controls
 {
   public class SitecoreSimpleFormAscx : Sitecore.Form.Web.UI.Controls.SitecoreSimpleFormAscx
   {
-    private readonly IActionExecutor actionExecutor;
+    private readonly FormDataHandler formDataHandler;
 
     private readonly IAnalyticsTracker analyticsTracker;
 
@@ -39,7 +39,7 @@ namespace Sitecore.Support.Form.Web.UI.Controls
     {
       this.EventCounter = new HiddenField();
       this.AntiCsrf = new HiddenField();
-      this.actionExecutor = DependenciesManager.ActionExecutor;
+      this.formDataHandler = DependenciesManager.Resolve<FormDataHandler>();
       this.analyticsTracker = DependenciesManager.AnalyticsTracker;
     }
 
@@ -162,7 +162,7 @@ namespace Sitecore.Support.Form.Web.UI.Controls
 
         try
         {
-          FormDataHandler.ProcessData(this.FormID, base.GetChildState().ToArray(), actions.ToArray(), this.actionExecutor);
+          this.formDataHandler.ProcessForm(this.FormID, base.GetChildState().ToArray(), actions.ToArray());
 
           this.OnSuccessSubmit();
 
